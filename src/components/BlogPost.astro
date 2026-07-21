@@ -1,7 +1,6 @@
 ---
 import { render } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import AdSlot from '@/components/ads/AdSlot.astro';
 import {
   getRelatedPosts,
   getTranslations,
@@ -86,14 +85,6 @@ const dateFormatter = new Intl.DateTimeFormat(isPt ? 'pt-BR' : 'en-GB', {
         </header>
 
         {/*
-          Between the standfirst and the body, never inside the body: the
-          article is rendered markdown, so there is no seam to inject into
-          mid-text without a rehype plugin. Two slots at the article's own
-          boundaries beat one wedged between a heading and its paragraph.
-        */}
-        <AdSlot class="mt-0" />
-
-        {/*
           Article body diverges from the UI type scale on purpose: reading and
           scanning are different tasks. Wider line height, a measure capped near
           68 characters, and generous spacing between blocks.
@@ -103,8 +94,6 @@ const dateFormatter = new Intl.DateTimeFormat(isPt ? 'pt-BR' : 'en-GB', {
         >
           <Content />
         </div>
-
-        <AdSlot />
       </article>
 
       <aside class="flex flex-col gap-8 lg:sticky lg:top-8 lg:self-start">

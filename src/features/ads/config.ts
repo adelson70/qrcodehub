@@ -1,35 +1,32 @@
 /**
- * Ad configuration, resolved from two environment values.
+ * Ad configuration, resolved from the publisher ID.
  *
  * Deliberately free of any `astro:env` import so it can be unit tested: Vitest
  * runs without Astro's Vite plugin, and a bare `astro:env/client` import fails
  * to resolve there. The virtual module is read in `env.ts` instead, which does
- * nothing but hand its values to `resolveAds`. All the behaviour worth testing
+ * nothing but hand its value to `resolveAds`. All the behaviour worth testing
  * lives here.
  */
 
 export interface AdsConfig {
-  /** False whenever either value is missing. Nothing renders when false. */
+  /** False whenever the publisher ID is missing. Nothing renders when false. */
   readonly enabled: boolean;
   readonly client: string;
-  readonly slot: string;
 }
 
-const DISABLED: AdsConfig = { enabled: false, client: '', slot: '' };
+const DISABLED: AdsConfig = { enabled: false, client: '' };
 
 /**
- * Both values are required together. A publisher ID without a slot ID -- or the
- * reverse -- cannot produce a serving ad unit, only an `<ins>` that sits there
- * empty and an AdSense script loaded for nothing. Treating a half-configuration
- * as "off" fails in the direction that costs the visitor least.
+ * Auto ads need only the publisher ID. Placement and formats are controlled in
+ * the AdSense dashboard, not in code — loading the script is the entire
+ * integration. An empty ID ships an ad-free site rather than a broken loader.
  */
-export function resolveAds(client?: string, slot?: string): AdsConfig {
-  const slotId = slot?.trim() ?? '';
+export function resolveAds(client?: string): AdsConfig {
   const clientId = normalizeClient(client);
 
-  if (!clientId || !slotId) return DISABLED;
+  if (!clientId) return DISABLED;
 
-  return { enabled: true, client: clientId, slot: slotId };
+  return { enabled: true, client: clientId };
 }
 
 /**

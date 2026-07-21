@@ -58,7 +58,19 @@ const STRINGS = {
     'page.privacyBody':
       'This page does all its work in your browser. Open your developer tools and watch the network tab while you type — you will not see a single request carrying what you entered.',
 
-    'ads.label': 'Advertisement',
+    'ads.notice': 'Ads keep QRHub free for everyone. Thanks for understanding!',
+    'ads.notice.dismiss': 'Dismiss notice',
+    'ads.adblock.title': 'Ad blocker detected',
+    'ads.adblock.body':
+      'QRHub is free because of ads. Please disable your ad blocker for this site so we can keep it that way.',
+    'ads.adblock.reassurance':
+      'Our ads are discreet and won\'t get in the way of your browsing.',
+    'ads.adblock.refresh': 'After disabling, refresh this page',
+
+    'notFound.title': 'Page not found',
+    'notFound.lead': 'The page you are looking for does not exist or has moved.',
+    'notFound.home': 'Back to home',
+    'notFound.tools': 'Browse all tools',
   },
 
   'pt-BR': {
@@ -106,7 +118,20 @@ const STRINGS = {
     'page.privacyBody':
       'Esta página faz todo o trabalho no seu navegador. Abra as ferramentas de desenvolvedor e observe a aba de rede enquanto digita — você não verá uma única requisição carregando o que você escreveu.',
 
-    'ads.label': 'Publicidade',
+    'ads.notice':
+      'Os anúncios mantêm o QRHub gratuito para todos. Obrigado pela compreensão!',
+    'ads.notice.dismiss': 'Fechar aviso',
+    'ads.adblock.title': 'Bloqueador de anúncios detectado',
+    'ads.adblock.body':
+      'O QRHub é gratuito graças aos anúncios. Desative o bloqueador de anúncios neste site para que possamos continuar assim.',
+    'ads.adblock.reassurance':
+      'Nossos anúncios são discretos e não atrapalham a sua navegação.',
+    'ads.adblock.refresh': 'Depois de desativar, atualize esta página',
+
+    'notFound.title': 'Página não encontrada',
+    'notFound.lead': 'A página que você procura não existe ou foi movida.',
+    'notFound.home': 'Voltar ao início',
+    'notFound.tools': 'Ver todas as ferramentas',
   },
 } as const;
 

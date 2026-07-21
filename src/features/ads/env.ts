@@ -1,4 +1,4 @@
-import { PUBLIC_ADSENSE_CLIENT, PUBLIC_ADSENSE_SLOT } from 'astro:env/client';
+import { PUBLIC_ADSENSE_CLIENT } from 'astro:env/client';
 import { resolveAds } from './config';
 
 /**
@@ -12,4 +12,4 @@ import { resolveAds } from './config';
  * build, so the values are compile-time constants and `enabled` collapses to a
  * literal -- when it is false, the markup guarded by it is never emitted.
  */
-export const ads = resolveAds(PUBLIC_ADSENSE_CLIENT, PUBLIC_ADSENSE_SLOT);
+export const ads = resolveAds(PUBLIC_ADSENSE_CLIENT);

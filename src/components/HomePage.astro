@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import AdSlot from '@/components/ads/AdSlot.astro';
 import QrStudio from '@/features/qr/studio/QrStudio';
 import { qrTypes } from '@/features/qr/registry';
 import { TYPE_LOCALES, typePath } from '@/features/qr/types/locales';
@@ -65,8 +64,6 @@ const values = [
 
     <QrStudio client:load />
 
-    <AdSlot />
-
     <section class="mt-20 border-t border-border pt-12">
       <h2 class="text-h2">{t('home.allTypes')}</h2>
       <p class="mt-2 max-w-2xl text-body text-text-secondary">{t('home.allTypesLead')}</p>
@@ -93,8 +90,6 @@ const values = [
         }
       </ul>
     </section>
-
-    <AdSlot />
 
     <section class="mt-16 grid gap-10 border-t border-border pt-12 sm:grid-cols-3">
       {

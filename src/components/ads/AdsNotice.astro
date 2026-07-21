@@ -1,0 +1,64 @@
+---
+/**
+ * Fixed bottom banner explaining why ads exist.
+ *
+ * Dismissed on click/tap and remembered in localStorage. Rendered only when
+ * AdSense is configured — same gate as every other ad component.
+ */
+import { ads } from '@/features/ads/env';
+import { useTranslations } from '@/i18n/ui';
+import { localeFromPath } from '@/i18n/utils';
+
+const t = useTranslations(localeFromPath(Astro.url.pathname));
+---
+
+{
+  ads.enabled && (
+    <div
+      id="ads-notice"
+      data-testid="ads-notice"
+      class="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface transition-opacity duration-(--duration-base) data-hidden:pointer-events-none data-hidden:opacity-0"
+    >
+      <button
+        type="button"
+        id="ads-notice-dismiss"
+        class="mx-auto flex w-full max-w-6xl items-center justify-center px-6 py-3 text-center text-body-sm text-text-secondary transition-colors duration-(--duration-fast) hover:bg-surface-hover hover:text-text-primary pointer-coarse:min-h-11"
+        aria-label={t('ads.notice.dismiss')}
+      >
+        {t('ads.notice')}
+      </button>
+    </div>
+  )
+}
+
+{
+  ads.enabled && (
+    <script is:inline>
+      (function () {
+        var STORAGE_KEY = 'qrhub-ads-notice-dismissed';
+        var banner = document.getElementById('ads-notice');
+        var button = document.getElementById('ads-notice-dismiss');
+        if (!banner || !button) return;
+
+        function hide() {
+          banner.setAttribute('data-hidden', 'true');
+        }
+
+        try {
+          if (localStorage.getItem(STORAGE_KEY) === '1') hide();
+        } catch (e) {
+          // Private mode can throw on localStorage access.
+        }
+
+        button.addEventListener('click', function () {
+          try {
+            localStorage.setItem(STORAGE_KEY, '1');
+          } catch (e) {
+            // Dismiss for this visit even when storage is unavailable.
+          }
+          hide();
+        });
+      })();
+    </script>
+  )
+}

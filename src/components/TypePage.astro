@@ -7,7 +7,6 @@
  * change. Duplicating it would guarantee the two drift.
  */
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import AdSlot from '@/components/ads/AdSlot.astro';
 import TypeStudio from '@/features/qr/studio/TypeStudio';
 import { getRelatedTypes } from '@/features/qr/registry';
 import { getTypeContent } from '@/features/qr/types/content';
@@ -91,8 +90,6 @@ const schema = [
 
     <TypeStudio typeId={typeId} client:load />
 
-    <AdSlot />
-
     {/* ------------------------------------------------------------------ */}
     {/* Below the fold: the content that makes the page rank.              */}
     {/* ------------------------------------------------------------------ */}
@@ -127,9 +124,6 @@ const schema = [
             ))
           }
         </section>
-
-        {/* my-0: the parent flex column already supplies the gap-12 rhythm. */}
-        <AdSlot class="my-0" />
 
         <section>
           <h2 class="text-h2">{t('page.expires')}</h2>

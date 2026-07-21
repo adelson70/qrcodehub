@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import AdSlot from '@/components/ads/AdSlot.astro';
 import { qrTypes } from '@/features/qr/registry';
 import { getTypeContent } from '@/features/qr/types/content';
 import { TYPE_LOCALES, typePath } from '@/features/qr/types/locales';
@@ -73,7 +72,5 @@ const schema = [
         })
       }
     </ul>
-
-    <AdSlot />
   </main>
 </BaseLayout>

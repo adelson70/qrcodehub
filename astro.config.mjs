@@ -38,24 +38,20 @@ export default defineConfig({
   },
 
   /*
-   * AdSense credentials. Both are optional, and that is the whole design: an
-   * empty value disables ads completely rather than emitting a broken ad unit.
-   * `context: 'client'` and `access: 'public'` because these end up in the
-   * markup by definition -- a publisher ID is visible in the page source of
-   * every site running AdSense. Nothing secret is being exposed here; the
-   * declaration just makes that explicit and gives the values a type.
+   * AdSense publisher ID. Optional, and that is the whole design: an empty
+   * value disables ads completely. Auto ads need only this ID -- placement and
+   * formats are controlled in the AdSense dashboard, not in code.
    *
-   * This is a static build, so the values are inlined at compile time. Editing
+   * `context: 'client'` and `access: 'public'` because the ID ends up in the
+   * markup by definition -- a publisher ID is visible in the page source of
+   * every site running AdSense.
+   *
+   * This is a static build, so the value is inlined at compile time. Editing
    * .env without rebuilding leaves dist/ untouched.
    */
   env: {
     schema: {
       PUBLIC_ADSENSE_CLIENT: envField.string({
-        context: 'client',
-        access: 'public',
-        optional: true,
-      }),
-      PUBLIC_ADSENSE_SLOT: envField.string({
         context: 'client',
         access: 'public',
         optional: true,

@@ -1,10 +1,10 @@
 ---
 /**
- * The AdSense loader, emitted once per page from <head>.
+ * The AdSense Auto ads loader, emitted once per page from <head>.
  *
- * Rendered only when both env values are set. An unconfigured build ships no
- * request to googlesyndication.com at all -- which is what keeps the Lighthouse
- * and bundle-budget scripts measuring the site rather than measuring AdSense.
+ * Auto ads need only the publisher ID in the script URL. Placement and formats
+ * are configured in the AdSense dashboard, not in code. An unconfigured build
+ * ships no request to googlesyndication.com at all.
  */
 import { ads } from '@/features/ads/env';
 ---
