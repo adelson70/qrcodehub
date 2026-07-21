@@ -1,0 +1,96 @@
+---
+import { qrTypes } from '@/features/qr/registry';
+import { TYPE_LOCALES, typePath } from '@/features/qr/types/locales';
+import { scannerPath } from '@/features/scanner/page-content';
+import type { Locale } from '@/i18n/config';
+import { useTranslations } from '@/i18n/ui';
+
+/**
+ * The footer is a primary internal-linking surface, not decoration.
+ *
+ * Linking every type here guarantees a crawl depth of one from any page to
+ * every money page, which is the cheapest structural SEO win available and
+ * costs nothing to maintain because the list comes from the registry.
+ */
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const year = new Date().getFullYear();
+const toolsPath = locale === 'en' ? '/tools' : '/pt/ferramentas';
+---
+
+<footer class="mt-24 border-t border-border">
+  <div class="mx-auto max-w-6xl px-6 py-12">
+    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+      <div>
+        <h2 class="mb-3 text-body-sm font-semibold text-text-primary">
+          {t('footer.types')}
+        </h2>
+        <ul class="flex flex-col gap-2">
+          {
+            qrTypes.map((type) => {
+              const meta = TYPE_LOCALES[locale][type.id];
+              if (!meta) return null;
+              return (
+                <li>
+                  <a
+                    href={typePath(type.id, locale)}
+                    class="inline-flex items-center text-body-sm text-text-secondary transition-colors duration-(--duration-fast) hover:text-text-primary pointer-coarse:min-h-11"
+                  >
+                    {meta.label}
+                  </a>
+                </li>
+              );
+            })
+          }
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="mb-3 text-body-sm font-semibold text-text-primary">
+          {t('footer.tools')}
+        </h2>
+        <ul class="flex flex-col gap-2">
+          <li>
+            <a
+              href={toolsPath}
+              class="inline-flex items-center text-body-sm text-text-secondary transition-colors duration-(--duration-fast) hover:text-text-primary pointer-coarse:min-h-11"
+            >
+              {t('footer.allGenerators')}
+            </a>
+          </li>
+          <li>
+            <a
+              href={scannerPath(locale)}
+              class="inline-flex items-center text-body-sm text-text-secondary transition-colors duration-(--duration-fast) hover:text-text-primary pointer-coarse:min-h-11"
+            >
+              {locale === 'en' ? 'QR code scanner' : 'Leitor de QR Code'}
+            </a>
+          </li>
+          <li>
+            <a
+              href={locale === 'en' ? '/blog' : '/pt/blog'}
+              class="inline-flex items-center text-body-sm text-text-secondary transition-colors duration-(--duration-fast) hover:text-text-primary pointer-coarse:min-h-11"
+            >
+              Blog
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="lg:col-span-2">
+        <h2 class="mb-3 text-body-sm font-semibold text-text-primary">
+          {t('footer.howItWorks')}
+        </h2>
+        <p class="max-w-md text-body-sm text-text-secondary">{t('footer.explanation')}</p>
+      </div>
+    </div>
+
+    <p class="mt-10 border-t border-border pt-6 text-caption text-text-secondary">
+      &copy; {year} QRHub. {t('footer.rights')}
+    </p>
+  </div>
+</footer>

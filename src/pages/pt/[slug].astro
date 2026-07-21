@@ -1,0 +1,24 @@
+---
+/**
+ * Portuguese type pages.
+ *
+ * The slugs are translated, not shared: Brazilians search "gerador de qr code
+ * wifi", and a matching slug is one of the few on-page signals that still moves
+ * a ranking. That is also why hreflang is built from an explicit per-locale
+ * path map rather than assuming a common slug.
+ */
+import TypePage from '@/components/TypePage.astro';
+import { qrTypes } from '@/features/qr/registry';
+import { TYPE_LOCALES } from '@/features/qr/types/locales';
+
+export function getStaticPaths() {
+  return qrTypes.map((type) => ({
+    params: { slug: TYPE_LOCALES['pt-BR'][type.id]!.slug.replace(/^\//, '') },
+    props: { typeId: type.id },
+  }));
+}
+
+const { typeId } = Astro.props;
+---
+
+<TypePage typeId={typeId} locale="pt-BR" />

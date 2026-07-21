@@ -1,0 +1,161 @@
+---
+import { QrCode, Sun } from 'lucide-react';
+import { qrTypes } from '@/features/qr/registry';
+import { TYPE_LOCALES, typePath } from '@/features/qr/types/locales';
+import { scannerPath } from '@/features/scanner/page-content';
+import { LOCALES, LOCALE_NAME, type Locale } from '@/i18n/config';
+import { useTranslations } from '@/i18n/ui';
+
+interface Props {
+  locale: Locale;
+  /**
+   * This page's path in every locale, forwarded from the page.
+   *
+   * The switcher cannot derive the other locale's URL from the current path:
+   * slugs are translated, so `/wifi-qr-code` maps to
+   * `/pt/gerador-qr-code-wifi`, not `/pt/wifi-qr-code`. Guessing would send
+   * people to 404s, which is worse than not offering the switch.
+   *
+   * Pages that declare no alternates fall back to the other locale's homepage,
+   * which is a real destination rather than a broken one.
+   */
+  alternates?: Partial<Record<Locale, string>>;
+}
+
+const { locale, alternates } = Astro.props;
+const t = useTranslations(locale);
+const path = Astro.url.pathname;
+
+const toolsPath = locale === 'en' ? '/tools' : '/pt/ferramentas';
+const blogPath = locale === 'en' ? '/blog' : '/pt/blog';
+const scannerHref = scannerPath(locale);
+const homePath = locale === 'en' ? '/' : '/pt';
+
+const switcher = LOCALES.filter((candidate) => candidate !== locale).map((candidate) => ({
+  locale: candidate,
+  name: LOCALE_NAME[candidate],
+  href: alternates?.[candidate] ?? (candidate === 'en' ? '/' : '/pt'),
+}));
+
+/*
+ * `min-h-11` is 44px, the minimum comfortable touch target. Nav items were
+ * 30px tall, which is fine with a mouse and a coin toss with a thumb — and a
+ * missed tap here lands on the item beside it.
+ */
+const navItem =
+  'inline-flex min-h-11 items-center rounded-md px-2.5 text-body-sm text-text-secondary transition-colors duration-(--duration-fast) hover:bg-surface-hover hover:text-text-primary aria-[current=page]:text-text-primary';
+---
+
+<header class="border-b border-border">
+  {/*
+    Wraps to a second row on narrow screens rather than overflowing.
+
+    Six items do not fit 360px on one line. The previous version pushed the
+    language switcher off the right edge entirely, which made it unreachable
+    rather than merely cramped — and dragged the whole document sideways with
+    it. Wrapping keeps every destination available at any width, with no
+    breakpoint guesswork and no JavaScript.
+  */}
+  <nav
+    aria-label="Main"
+    class="mx-auto flex max-w-6xl flex-wrap items-center gap-x-1 gap-y-1 px-4 py-2 sm:px-6 sm:py-3"
+  >
+    <a
+      href={homePath}
+      class="mr-auto inline-flex min-h-11 items-center gap-2 pr-2 text-body-sm font-semibold text-text-primary"
+    >
+      <QrCode className="size-5 text-accent" aria-hidden="true" />
+      QRHub
+    </a>
+
+    {/*
+      A plain <details> element: no JavaScript, and keyboard behaviour plus the
+      accessibility tree come for free. This is navigation, not an application
+      control, so the native semantics are exactly right.
+    */}
+    <details class="relative">
+      <summary
+        class={`cursor-pointer list-none ${navItem}`}
+      >
+        {t('nav.types')}
+      </summary>
+      {/*
+        Fixed and inset on phones, anchored to the trigger on desktop.
+
+        `absolute right-0 w-64` alone overflows: the trigger sits well inside the
+        row, so a 256px panel anchored to its right edge starts at a negative
+        offset and pushes the document sideways. Anchoring to the viewport
+        instead keeps it on screen at any width.
+      */}
+      <div
+        class="fixed inset-x-4 z-30 mt-1 max-h-[70vh] overflow-y-auto rounded-lg border border-border bg-bg p-1 shadow-overlay sm:absolute sm:inset-x-auto sm:right-0 sm:max-h-none sm:w-64 sm:overflow-visible"
+      >
+        {
+          qrTypes.map((type) => {
+            const meta = TYPE_LOCALES[locale][type.id];
+            if (!meta) return null;
+            const href = typePath(type.id, locale);
+            return (
+              <a
+                href={href}
+                aria-current={path === href ? 'page' : undefined}
+                class="flex min-h-11 items-center rounded-md px-3 text-body-sm text-text-primary transition-colors duration-(--duration-fast) hover:bg-surface-hover aria-[current=page]:bg-surface"
+              >
+                {meta.label}
+              </a>
+            );
+          })
+        }
+        <a
+          href={toolsPath}
+          class="flex min-h-11 items-center rounded-md border-t border-border px-3 text-body-sm font-medium text-accent"
+        >
+          {t('nav.allTools')}
+        </a>
+      </div>
+    </details>
+
+    <a
+      href={scannerHref}
+      aria-current={path === scannerHref ? 'page' : undefined}
+      class={navItem}
+    >
+      {locale === 'en' ? 'Scanner' : 'Leitor'}
+    </a>
+
+    <a href={blogPath} aria-current={path.startsWith(blogPath) ? 'page' : undefined} class={navItem}>
+      Blog
+    </a>
+
+    {
+      switcher.map((entry) => (
+        <a href={entry.href} hreflang={entry.locale} data-testid="language-switch" class={navItem}>
+          {/* Full name where there is room, language code where there is not. */}
+          <span class="hidden sm:inline">{entry.name}</span>
+          <span class="sm:hidden">{entry.locale === 'en' ? 'EN' : 'PT'}</span>
+        </a>
+      ))
+    }
+
+    <button type="button" data-theme-toggle aria-label={t('nav.theme')} class={navItem}>
+      {/* The label is carried by aria-label, so the icon alone is not a loss. */}
+      <Sun className="size-4 sm:hidden" aria-hidden="true" />
+      <span class="hidden sm:inline">{t('nav.theme')}</span>
+    </button>
+  </nav>
+</header>
+
+<script>
+  // Inline and tiny rather than a React island: a theme toggle that needs a
+  // framework to run is a framework in the critical path of every page,
+  // including the ones that otherwise ship no JavaScript at all.
+  document.querySelector('[data-theme-toggle]')?.addEventListener('click', () => {
+    const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = next;
+    try {
+      localStorage.setItem('qrhub-theme', next);
+    } catch {
+      /* Private mode: the choice simply does not persist. */
+    }
+  });
+</script>

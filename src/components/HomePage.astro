@@ -1,0 +1,110 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import AdSlot from '@/components/ads/AdSlot.astro';
+import QrStudio from '@/features/qr/studio/QrStudio';
+import { qrTypes } from '@/features/qr/registry';
+import { TYPE_LOCALES, typePath } from '@/features/qr/types/locales';
+import type { Locale } from '@/i18n/config';
+import { useTranslations } from '@/i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const canonical = locale === 'en' ? '/' : '/pt';
+const alternates = { en: '/', 'pt-BR': '/pt' } as const;
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'QRHub',
+    url: new URL('/', Astro.site).toString(),
+    inLanguage: locale,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: t('home.title'),
+    description: t('home.subtitle'),
+    url: new URL(canonical, Astro.site).toString(),
+    inLanguage: locale,
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Any',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  },
+];
+
+const values = [
+  { title: t('value.permanent.title'), body: t('value.permanent.body') },
+  { title: t('value.private.title'), body: t('value.private.body') },
+  { title: t('value.free.title'), body: t('value.free.body') },
+];
+---
+
+<BaseLayout
+  title={`${t('home.title')} — QRHub`}
+  description={t('home.subtitle')}
+  canonical={canonical}
+  alternates={alternates}
+  schema={schema}
+>
+  <main id="main" class="mx-auto max-w-6xl px-6 py-12 sm:py-20">
+    {/*
+      The hero and the studio shell are static HTML rendered by Astro. The
+      island hydrates into this markup rather than replacing it, so the largest
+      paint does not wait on JavaScript and nothing shifts when React arrives.
+    */}
+    <header class="mb-10 max-w-2xl">
+      <h1 class="text-display text-balance">{t('home.title')}</h1>
+      <p class="mt-4 text-body text-text-secondary text-pretty">{t('home.subtitle')}</p>
+    </header>
+
+    <QrStudio client:load />
+
+    <AdSlot />
+
+    <section class="mt-20 border-t border-border pt-12">
+      <h2 class="text-h2">{t('home.allTypes')}</h2>
+      <p class="mt-2 max-w-2xl text-body text-text-secondary">{t('home.allTypesLead')}</p>
+
+      <ul class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          qrTypes.map((type) => {
+            const meta = TYPE_LOCALES[locale][type.id];
+            if (!meta) return null;
+            return (
+              <li>
+                <a
+                  href={typePath(type.id, locale)}
+                  class="flex h-full flex-col gap-1 rounded-lg border border-border bg-surface p-4 transition-colors duration-(--duration-fast) hover:bg-surface-hover"
+                >
+                  <span class="text-body-sm font-medium text-text-primary">
+                    {meta.label}
+                  </span>
+                  <span class="text-caption text-text-secondary">{meta.seo.keyword}</span>
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </section>
+
+    <AdSlot />
+
+    <section class="mt-16 grid gap-10 border-t border-border pt-12 sm:grid-cols-3">
+      {
+        values.map((value) => (
+          <div>
+            <h2 class="text-h3">{value.title}</h2>
+            <p class="mt-2 text-body-sm text-text-secondary">{value.body}</p>
+          </div>
+        ))
+      }
+    </section>
+  </main>
+</BaseLayout>

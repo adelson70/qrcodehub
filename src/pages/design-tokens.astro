@@ -1,0 +1,168 @@
+---
+/**
+ * TEMPORARY: design-token proof page for Step 1.
+ * Replaced by the real homepage in Step 6. Its only job is to make every token
+ * visible in both themes so a regression is obvious rather than subtle.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+const surfaces = [
+  { name: '--bg', label: 'Background' },
+  { name: '--surface', label: 'Surface' },
+  { name: '--surface-hover', label: 'Surface hover' },
+  { name: '--border', label: 'Border' },
+  { name: '--border-strong', label: 'Border strong' },
+];
+
+const content = [
+  { name: '--text-primary', label: 'Text primary' },
+  { name: '--text-secondary', label: 'Text secondary' },
+  { name: '--accent', label: 'Accent' },
+  { name: '--accent-hover', label: 'Accent hover' },
+  { name: '--success', label: 'Success' },
+  { name: '--warning', label: 'Warning' },
+  { name: '--error', label: 'Error' },
+];
+
+const typeScale = [
+  { cls: 'text-display', label: 'display / 48' },
+  { cls: 'text-h1', label: 'h1 / 36' },
+  { cls: 'text-h2', label: 'h2 / 24' },
+  { cls: 'text-h3', label: 'h3 / 18' },
+  { cls: 'text-body', label: 'body / 16' },
+  { cls: 'text-body-sm', label: 'body-sm / 14' },
+  { cls: 'text-caption', label: 'caption / 12' },
+];
+---
+
+<BaseLayout
+  title="QRHub — Design tokens"
+  description="Internal design token verification page."
+  noindex
+>
+  <main id="main" class="mx-auto max-w-4xl px-6 py-16">
+    <header class="mb-12 flex items-start justify-between gap-6">
+      <div>
+        <h1 class="text-h1">Design tokens</h1>
+        <p class="mt-2 text-body text-text-secondary">
+          Step 1 verification. Toggle the theme and confirm every value shifts.
+        </p>
+      </div>
+      <button
+        id="theme-toggle"
+        type="button"
+        class="rounded-md border border-border-strong bg-surface px-4 py-2 text-body-sm font-medium transition-colors duration-(--duration-fast) hover:bg-surface-hover"
+      >
+        Toggle theme
+      </button>
+    </header>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-h2">Surfaces &amp; borders</h2>
+      <div class="grid grid-cols-2 gap-3 sm:grid-cols-5">
+        {
+          surfaces.map((token) => (
+            <div class="rounded-lg border border-border p-3">
+              <div
+                class="mb-3 h-16 rounded-md border border-border"
+                style={`background: var(${token.name})`}
+              />
+              <p class="text-body-sm font-medium">{token.label}</p>
+              <code class="text-caption text-text-secondary">{token.name}</code>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-h2">Content &amp; status</h2>
+      <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {
+          content.map((token) => (
+            <div class="rounded-lg border border-border p-3">
+              <div
+                class="mb-3 h-16 rounded-md"
+                style={`background: var(${token.name})`}
+              />
+              <p class="text-body-sm font-medium">{token.label}</p>
+              <code class="text-caption text-text-secondary">{token.name}</code>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-h2">Type scale</h2>
+      <div class="space-y-4 rounded-lg border border-border p-6">
+        {
+          typeScale.map((t) => (
+            <div class="flex items-baseline gap-6">
+              <code class="w-32 shrink-0 text-caption text-text-secondary">
+                {t.label}
+              </code>
+              <p class={t.cls}>Generate a QR code in ten seconds</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-h2">Radius &amp; elevation</h2>
+      <div class="flex flex-wrap gap-4">
+        <div class="rounded-sm border border-border bg-surface px-4 py-3 text-body-sm">
+          radius-sm / 6px
+        </div>
+        <div class="rounded-md border border-border bg-surface px-4 py-3 text-body-sm">
+          radius-md / 8px
+        </div>
+        <div class="rounded-lg border border-border bg-surface px-4 py-3 text-body-sm">
+          radius-lg / 12px
+        </div>
+        <div
+          class="rounded-lg border border-border bg-surface px-4 py-3 text-body-sm shadow-overlay"
+        >
+          shadow-overlay
+        </div>
+        <div
+          class="rounded-lg border border-border bg-surface px-4 py-3 text-body-sm shadow-modal"
+        >
+          shadow-modal
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="mb-4 text-h2">Focus &amp; accent</h2>
+      <div class="flex flex-wrap items-center gap-4">
+        <button
+          type="button"
+          class="rounded-md bg-accent px-4 py-2 text-body-sm font-medium text-accent-fg transition-colors duration-(--duration-fast) hover:bg-accent-hover"
+        >
+          Primary action
+        </button>
+        <button
+          type="button"
+          class="rounded-md border border-border-strong bg-surface px-4 py-2 text-body-sm font-medium transition-colors duration-(--duration-fast) hover:bg-surface-hover"
+        >
+          Secondary action
+        </button>
+        <p class="text-body-sm text-text-secondary">
+          Tab through these to verify the focus ring in both themes.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const toggle = document.getElementById('theme-toggle');
+    toggle?.addEventListener('click', () => {
+      const next =
+        document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = next;
+      localStorage.setItem('qrhub-theme', next);
+    });
+  </script>
+</BaseLayout>

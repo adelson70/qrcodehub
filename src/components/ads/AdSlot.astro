@@ -1,0 +1,59 @@
+---
+/**
+ * An in-content ad, placed between sections.
+ *
+ * Hidden at 2xl and above, where `AdRail` takes over. The two are mutually
+ * exclusive by breakpoint: a visitor sees the side rails or the in-content
+ * blocks, never both.
+ *
+ * The locale comes from the path rather than a prop so call sites stay a bare
+ * `<AdSlot />` -- one less thing to thread through six templates and one less
+ * thing to get wrong in the one template that forgets.
+ */
+import { ads } from '@/features/ads/env';
+import { useTranslations } from '@/i18n/ui';
+import { localeFromPath } from '@/i18n/utils';
+
+interface Props {
+  /** Extra classes, for tuning the vertical rhythm at the call site. */
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+const t = useTranslations(localeFromPath(Astro.url.pathname));
+---
+
+{
+  ads.enabled && (
+    <div class:list={['my-12 2xl:hidden', className]}>
+      {/*
+        The label is required by the AdSense policy on ads that could otherwise
+        be mistaken for site content, and it is the honest thing to do besides.
+      */}
+      <p class="mb-2 text-center text-caption text-text-secondary">{t('ads.label')}</p>
+
+      {/*
+        Height is reserved so the surrounding content does not jump when the ad
+        arrives. The cost is a ~250px gap on the minority of loads AdSense does
+        not fill; the alternative is a layout shift on every load that it does,
+        which is both worse to read and directly penalised in Core Web Vitals.
+      */}
+      <div class="min-h-[250px]">
+        <ins
+          class="adsbygoogle"
+          style="display:block"
+          data-ad-client={ads.client}
+          data-ad-slot={ads.slot}
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+        />
+        {/*
+          One push per unit, next to the unit it belongs to. `is:inline` keeps
+          Astro from bundling and deduplicating these -- a page with three slots
+          genuinely needs three pushes.
+        */}
+        <script is:inline>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+    </div>
+  )
+}

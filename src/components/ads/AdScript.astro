@@ -1,0 +1,27 @@
+---
+/**
+ * The AdSense loader, emitted once per page from <head>.
+ *
+ * Rendered only when both env values are set. An unconfigured build ships no
+ * request to googlesyndication.com at all -- which is what keeps the Lighthouse
+ * and bundle-budget scripts measuring the site rather than measuring AdSense.
+ */
+import { ads } from '@/features/ads/env';
+---
+
+{
+  /*
+   * `is:inline` is required. Without it Astro treats this as a script to
+   * process and bundle, and a third-party loader that must run from Google's
+   * own origin -- with its own caching and its own `client` query -- is exactly
+   * the kind of script that must be left alone.
+   */
+  ads.enabled && (
+    <script
+      is:inline
+      async
+      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ads.client}`}
+      crossorigin="anonymous"
+    />
+  )
+}

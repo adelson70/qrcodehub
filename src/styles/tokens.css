@@ -1,0 +1,116 @@
+/*
+ * QRHub design tokens.
+ *
+ * Every color in the product resolves through one of these semantic variables.
+ * A raw hex value inside a component is a bug: it will be correct in exactly one
+ * theme and silently wrong in the other.
+ *
+ * Light and dark are NOT the same palette inverted. Accent and status colors
+ * shift between modes because a single value cannot pass contrast in both --
+ * e.g. #2563EB on #0F172A measures ~3.4:1, below AA for body text.
+ */
+
+:root {
+  /* Surfaces */
+  --bg: #ffffff;
+  --surface: #f8fafc;
+  --surface-hover: #f1f5f9;
+
+  /* Borders -- the primary carrier of hierarchy in this system */
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+
+  /* Text */
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+
+  /* Accent */
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-fg: #ffffff;
+
+  /* Status */
+  --success: #16a34a;
+  --warning: #d97706;
+  --error: #dc2626;
+
+  /* Motion. Nothing exceeds 200ms: motion confirms causality, it doesn't entertain. */
+  --duration-fast: 120ms;
+  --duration-base: 160ms;
+  --duration-slow: 200ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Elevation. Only two levels, both reserved for content that floats above the
+     page. Anything in the document flow gets a border instead. */
+  --elevation-overlay: 0 4px 12px -2px rgb(15 23 42 / 0.08), 0 2px 4px -2px rgb(15 23 42 / 0.06);
+  --elevation-modal: 0 16px 40px -8px rgb(15 23 42 / 0.16), 0 4px 12px -4px rgb(15 23 42 / 0.08);
+}
+
+/* Explicit user choice wins over system preference. */
+:root[data-theme='dark'] {
+  --bg: #0f172a;
+  --surface: #1e293b;
+  --surface-hover: #293548;
+
+  --border: #334155;
+  --border-strong: #475569;
+
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+
+  --accent: #3b82f6;
+  --accent-hover: #60a5fa;
+  --accent-fg: #0f172a;
+
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --error: #ef4444;
+
+  /* Shadows are nearly invisible on dark surfaces, so borders carry the
+     elevation cue instead. Kept non-zero only for the ambient depth cue. */
+  --elevation-overlay: 0 4px 12px -2px rgb(0 0 0 / 0.4);
+  --elevation-modal: 0 16px 40px -8px rgb(0 0 0 / 0.6);
+}
+
+/*
+ * System-preference fallback for the no-JS case. The inline head script sets
+ * data-theme before first paint, so this normally never applies -- but without
+ * it, a JS-disabled visitor who prefers dark would get the light theme.
+ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #0f172a;
+    --surface: #1e293b;
+    --surface-hover: #293548;
+
+    --border: #334155;
+    --border-strong: #475569;
+
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+
+    --accent: #3b82f6;
+    --accent-hover: #60a5fa;
+    --accent-fg: #0f172a;
+
+    --success: #22c55e;
+    --warning: #f59e0b;
+    --error: #ef4444;
+
+    --elevation-overlay: 0 4px 12px -2px rgb(0 0 0 / 0.4);
+    --elevation-modal: 0 16px 40px -8px rgb(0 0 0 / 0.6);
+  }
+}
+
+/*
+ * Reduced motion is handled once, at the token level. Per-component media
+ * queries are the standard way this gets half-implemented: one component always
+ * gets missed.
+ */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 1ms;
+    --duration-base: 1ms;
+    --duration-slow: 1ms;
+  }
+}

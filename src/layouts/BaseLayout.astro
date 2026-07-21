@@ -1,0 +1,172 @@
+---
+import '@/styles/global.css';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+import AdScript from '@/components/ads/AdScript.astro';
+import AdRail from '@/components/ads/AdRail.astro';
+import { LOCALE_TAG, type Locale } from '@/i18n/config';
+import { buildAlternates, localeFromPath } from '@/i18n/utils';
+import { ogImageFor } from '@/features/seo/og-entries';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Omit to default to the current path. */
+  canonical?: string;
+  /** JSON-LD objects to emit. Built by callers from the type registry. */
+  schema?: readonly Record<string, unknown>[];
+  /** Internal pages that should stay out of the index. */
+  noindex?: boolean;
+  /**
+   * This page's path in each locale. Passed explicitly rather than derived,
+   * because translated slugs mean the paths differ (`/wifi-qr-code` against
+   * `/pt/gerador-qr-code-wifi`) and guessing would emit hreflang pointing at
+   * URLs that do not exist.
+   */
+  alternates?: Partial<Record<Locale, string>>;
+  /**
+   * Whether this page carries advertising.
+   *
+   * Defaults to the inverse of `noindex`, which is not a coincidence: the pages
+   * kept out of the index are the internal ones -- /scan-test, /design-tokens
+   * -- and an internal page has no audience to monetise. Tying the two means a
+   * future internal page is excluded by the act of marking it noindex, rather
+   * than by remembering a second flag.
+   */
+  ads?: boolean;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  schema = [],
+  noindex = false,
+  alternates,
+  ads = !noindex,
+} = Astro.props;
+
+const locale = localeFromPath(Astro.url.pathname);
+const canonicalUrl = new URL(canonical ?? Astro.url.pathname, Astro.site);
+
+/*
+ * Resolved against the same list the OG route generates from, rather than
+ * derived from the path. Deriving it produced references to cards that were
+ * never built -- /tools and /blog among them -- and a broken og:image renders
+ * an empty preview instead of falling back to anything.
+ */
+const ogImage = new URL(await ogImageFor(canonicalUrl.pathname), Astro.site);
+const alternateLinks = alternates ? buildAlternates(alternates, Astro.site) : [];
+---
+
+<!doctype html>
+<html lang={LOCALE_TAG[locale]}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+
+    {/*
+      Reciprocal and self-inclusive: every version links to every version,
+      including itself. Google discards hreflang clusters whose return links are
+      missing, so a one-way declaration is worse than none — it looks correct
+      while doing nothing.
+    */}
+    {
+      alternateLinks.map((alternate) => (
+        <link rel="alternate" hreflang={alternate.hreflang} href={alternate.href} />
+      ))
+    }
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content="QRHub" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!--
+      Preload the font so it is requested in parallel with the stylesheet rather
+      than after it. crossorigin is required even for same-origin font fetches;
+      without it the browser downloads the file twice.
+    -->
+    <link
+      rel="preload"
+      href="/fonts/inter-latin-wght.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <!--
+      The one place a blocking inline script is correct. Theme must be resolved
+      before first paint; the alternative is a flash of the wrong theme, which
+      is far worse than the sub-millisecond cost of running this.
+    -->
+    <script is:inline>
+      (function () {
+        try {
+          var stored = localStorage.getItem('qrhub-theme');
+          var theme =
+            stored === 'light' || stored === 'dark'
+              ? stored
+              : window.matchMedia('(prefers-color-scheme: dark)').matches
+                ? 'dark'
+                : 'light';
+          document.documentElement.dataset.theme = theme;
+        } catch (e) {
+          // Private mode can throw on localStorage access. The CSS
+          // prefers-color-scheme fallback covers this case.
+        }
+      })();
+    </script>
+
+    {
+      schema.map((entry) => (
+        <script
+          type="application/ld+json"
+          is:inline
+          set:html={JSON.stringify(entry)}
+        />
+      ))
+    }
+
+    {ads && <AdScript />}
+  </head>
+
+  <body class="flex min-h-dvh flex-col">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:border focus:border-border-strong focus:bg-surface focus:px-4 focus:py-2 focus:text-body-sm"
+    >
+      Skip to content
+    </a>
+
+    <Header locale={locale} alternates={alternates} />
+
+    {/*
+      The rails are `fixed`, so their position in the markup is irrelevant to
+      where they paint. They sit here, after the header, purely so reading order
+      matches visual order for anyone tabbing or using a screen reader: the
+      navigation still comes first.
+    */}
+    {
+      ads && (
+        <>
+          <AdRail side="left" />
+          <AdRail side="right" />
+        </>
+      )
+    }
+
+    <div class="flex-1">
+      <slot />
+    </div>
+    <Footer locale={locale} />
+  </body>
+</html>

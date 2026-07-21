@@ -1,0 +1,109 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import AdSlot from '@/components/ads/AdSlot.astro';
+import Scanner from '@/features/scanner/Scanner';
+import {
+  SCANNER_CONTENT,
+  scannerAlternates,
+  scannerPath,
+} from '@/features/scanner/page-content';
+import type { Locale } from '@/i18n/config';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const content = SCANNER_CONTENT[locale];
+const canonical = scannerPath(locale);
+const pageUrl = new URL(canonical, Astro.site).toString();
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: content.title,
+    description: content.description,
+    url: pageUrl,
+    inLanguage: locale,
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Any',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    inLanguage: locale,
+    mainEntity: content.faq.map((entry) => ({
+      '@type': 'Question',
+      name: entry.question,
+      acceptedAnswer: { '@type': 'Answer', text: entry.answer },
+    })),
+  },
+];
+---
+
+<BaseLayout
+  title={`${content.title} — Free, Nothing Uploaded | QRHub`}
+  description={content.description}
+  canonical={canonical}
+  alternates={scannerAlternates}
+  schema={schema}
+>
+  <main id="main" class="mx-auto max-w-6xl px-6 py-12 sm:py-16">
+    <header class="mb-10 max-w-2xl">
+      <h1 class="text-h1 text-balance">{content.title}</h1>
+      <p class="mt-3 text-body text-text-secondary text-pretty">{content.intro}</p>
+    </header>
+
+    {/*
+      client:load, not client:idle.
+
+      An earlier version used idle on the reasoning that nothing here is usable
+      until the visitor acts. That is backwards: the visitor's first act can
+      arrive BEFORE idle fires, and on a slow device that window is seconds. The
+      file input exists in the static HTML and accepts a file the moment the
+      page paints — if React is not listening yet, choosing a file does nothing
+      at all, silently.
+
+      The decoder itself is still lazy: 250 KB that only loads on first scan.
+    */}
+    <Scanner locale={locale} client:load />
+
+    <AdSlot />
+
+    <div class="mt-20 max-w-2xl border-t border-border pt-12">
+      <div class="flex flex-col gap-12">
+        {
+          content.sections.map((section) => (
+            <section>
+              <h2 class="text-h2">{section.heading}</h2>
+              {section.body.map((paragraph) => (
+                <p class="mt-4 text-body text-text-secondary">{paragraph}</p>
+              ))}
+            </section>
+          ))
+        }
+
+        {/* my-0: the parent flex column already supplies the gap-12 rhythm. */}
+        <AdSlot class="my-0" />
+
+        <section>
+          <h2 class="text-h2">
+            {locale === 'en' ? 'Frequently asked questions' : 'Perguntas frequentes'}
+          </h2>
+          <dl class="mt-4 flex flex-col divide-y divide-border border-y border-border">
+            {
+              content.faq.map((entry) => (
+                <div class="py-5">
+                  <dt class="text-h3">{entry.question}</dt>
+                  <dd class="mt-2 text-body text-text-secondary">{entry.answer}</dd>
+                </div>
+              ))
+            }
+          </dl>
+        </section>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
