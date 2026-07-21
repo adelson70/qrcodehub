@@ -40,7 +40,6 @@ export default defineConfig({
   /*
    * AdSense credentials. Both are optional, and that is the whole design: an
    * empty value disables ads completely rather than emitting a broken ad unit.
-   *
    * `context: 'client'` and `access: 'public'` because these end up in the
    * markup by definition -- a publisher ID is visible in the page source of
    * every site running AdSense. Nothing secret is being exposed here; the
