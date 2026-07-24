@@ -1,10 +1,24 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
+import { CANONICAL_SITE_ORIGIN } from './canonical-site.mjs';
 
-const ROOT = join(import.meta.dirname, '../..');
+/** `src/content/blog` — resolved from repo root so build/CI paths stay stable. */
+const SRC_ROOT = join(process.cwd(), 'src');
 
 /** @type {readonly string[]} */
 const EXCLUDED_SNIPPETS = ['/scan-test', '/design-tokens', '/404'];
+
+/**
+ * @param {string} page
+ * @returns {string}
+ */
+function pathnameFromSitemapPage(page) {
+  try {
+    return new URL(page).pathname;
+  } catch {
+    return new URL(page, CANONICAL_SITE_ORIGIN).pathname;
+  }
+}
 
 /**
  * @param {string} page
@@ -14,12 +28,8 @@ export function sitemapFilter(page) {
   if (EXCLUDED_SNIPPETS.some((snippet) => page.includes(snippet))) {
     return false;
   }
-  try {
-    const path = new URL(page).pathname;
-    if (path.startsWith('/og/') || path === '/og') return false;
-  } catch {
-    return false;
-  }
+  const path = pathnameFromSitemapPage(page);
+  if (path.startsWith('/og/') || path === '/og') return false;
   return true;
 }
 
@@ -30,16 +40,20 @@ export function sitemapFilter(page) {
 function blogLastmodBySlug(dir) {
   /** @type {Map<string, string>} */
   const map = new Map();
-  const base = join(ROOT, 'content/blog', dir);
-  for (const name of readdirSync(base)) {
-    if (!name.endsWith('.md')) continue;
-    const raw = readFileSync(join(base, name), 'utf8');
-    const updated = /^updatedAt:\s*(\S+)/m.exec(raw)?.[1];
-    const published = /^publishedAt:\s*(\S+)/m.exec(raw)?.[1];
-    const date = updated ?? published;
-    if (date) {
-      map.set(name.replace(/\.md$/, ''), new Date(date).toISOString());
+  const base = join(SRC_ROOT, 'content/blog', dir);
+  try {
+    for (const name of readdirSync(base)) {
+      if (!name.endsWith('.md')) continue;
+      const raw = readFileSync(join(base, name), 'utf8');
+      const updated = /^updatedAt:\s*(\S+)/m.exec(raw)?.[1];
+      const published = /^publishedAt:\s*(\S+)/m.exec(raw)?.[1];
+      const date = updated ?? published;
+      if (date) {
+        map.set(name.replace(/\.md$/, ''), new Date(date).toISOString());
+      }
     }
+  } catch {
+    // Partial checkouts or missing content should not break the whole sitemap.
   }
   return map;
 }
@@ -51,7 +65,14 @@ const BLOG_LASTMOD_PT = blogLastmodBySlug('pt');
  * @param {import('sitemap').SitemapItemLoose} item
  */
 export function sitemapSerialize(item) {
-  const path = new URL(item.url).pathname.replace(/\/$/, '') || '/';
+  if (!item?.url) return item;
+
+  let path;
+  try {
+    path = pathnameFromSitemapPage(item.url).replace(/\/$/, '') || '/';
+  } catch {
+    return item;
+  }
 
   if (path === '/' || path === '/pt') {
     item.priority = 1;

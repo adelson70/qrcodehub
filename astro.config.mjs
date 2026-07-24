@@ -76,6 +76,8 @@ export default defineConfig({
         defaultLocale: 'en',
         locales: { en: 'en', pt: 'pt-BR' },
       },
+      // Readable table in the browser; `/sitemap.xml` is copied from sitemap-0 post-build.
+      xslURL: '/sitemap.xsl',
       filter: sitemapFilter,
       serialize: sitemapSerialize,
     }),

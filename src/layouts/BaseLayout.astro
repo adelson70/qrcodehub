@@ -8,6 +8,7 @@ import AdBlockGuard from '@/components/ads/AdBlockGuard.astro';
 import { LOCALE_TAG, type Locale } from '@/i18n/config';
 import { buildAlternates, localeFromPath } from '@/i18n/utils';
 import { ogImageFor } from '@/features/seo/og-entries';
+import { BRAND_ICON_VERSION } from '@/features/brand/site-qr';
 
 /** Open Graph locale codes (not the same strings as hreflang). */
 const OG_LOCALE: Record<Locale, string> = {
@@ -75,6 +76,10 @@ const ogLocaleAlternates = alternateLinks
   .map((link) => ogLocaleFromHreflang(link.hreflang))
   .filter((value): value is string => Boolean(value) && value !== ogLocale);
 const ogLocaleAlternateUnique = [...new Set(ogLocaleAlternates)];
+const iconQuery = `?v=${BRAND_ICON_VERSION}`;
+const faviconSvg = new URL(`/favicon.svg${iconQuery}`, Astro.site);
+const faviconIco = new URL(`/favicon.ico${iconQuery}`, Astro.site);
+const appleTouchIcon = new URL(`/apple-touch-icon.png${iconQuery}`, Astro.site);
 ---
 
 <!doctype html>
@@ -82,7 +87,9 @@ const ogLocaleAlternateUnique = [...new Set(ogLocaleAlternates)];
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=3" />
+    <link rel="icon" href={faviconIco} sizes="32x32" />
+    <link rel="icon" type="image/svg+xml" href={faviconSvg} />
+    <link rel="apple-touch-icon" href={appleTouchIcon} />
 
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -92,7 +99,7 @@ const ogLocaleAlternateUnique = [...new Set(ogLocaleAlternates)];
         rel="sitemap"
         type="application/xml"
         title="Sitemap"
-        href={new URL('/sitemap-index.xml', Astro.site)}
+        href={new URL('/sitemap.xml', Astro.site)}
       />
     )}
     {noindex ? (

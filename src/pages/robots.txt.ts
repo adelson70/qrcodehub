@@ -19,6 +19,7 @@ Disallow: /design-tokens
 # Generative search / LLM crawlers (not blocked).
 # Summary: ${origin}/llms.txt
 
+Sitemap: ${origin}/sitemap.xml
 Sitemap: ${origin}/sitemap-index.xml
 `;
 

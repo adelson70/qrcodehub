@@ -12,7 +12,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "pnpm generate:brand && astro build",
+    "build": "pnpm generate:brand && astro build && node scripts/finalize-sitemap.mjs",
     "generate:brand": "UPDATE_BRAND_ASSETS=1 vitest run src/features/brand/write-favicon.test.ts",
     "deploy": "wrangler deploy",
     "preview": "astro preview",

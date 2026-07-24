@@ -1,6 +1,10 @@
 import { encodeQr } from '@/features/qr/encode/encode';
 import { renderSvg } from '@/features/qr/render/render';
 import { siteQrPayload } from '@/features/seo/site';
+import sharp from 'sharp';
+
+/** Bust browser/CDN caches when brand assets are regenerated. */
+export const BRAND_ICON_VERSION = '4';
 
 /**
  * Brand QR symbol: a real, scannable code for the canonical site URL.
@@ -10,12 +14,7 @@ import { siteQrPayload } from '@/features/seo/site';
  */
 export function renderSiteQrFaviconDocument(): string {
   const payload = siteQrPayload();
-  const encoded = encodeQr(payload, { errorCorrection: 'M' });
-  if (!encoded.ok) {
-    throw new Error(`Brand QR encode failed: ${encoded.failure.message}`);
-  }
-
-  const symbol = renderSvg(encoded.matrix, {
+  const symbol = renderSvg(brandQrMatrix(), {
     margin: 4,
     background: null,
     foreground: '#000000',
@@ -43,4 +42,28 @@ export function renderSiteQrFaviconDocument(): string {
   </style>
 </svg>
 `;
+}
+
+function brandQrMatrix() {
+  const encoded = encodeQr(siteQrPayload(), { errorCorrection: 'M' });
+  if (!encoded.ok) {
+    throw new Error(`Brand QR encode failed: ${encoded.failure.message}`);
+  }
+  return encoded.matrix;
+}
+
+/** Raster icon for browsers that only request `/favicon.ico` (all routes). */
+export async function renderSiteQrFaviconPng(size: number): Promise<Buffer> {
+  const svg = renderSvg(brandQrMatrix(), {
+    margin: 4,
+    background: '#ffffff',
+    foreground: '#000000',
+    moduleStyle: 'square',
+    cornerStyle: 'square',
+  });
+
+  return sharp(Buffer.from(svg))
+    .resize(size, size, { fit: 'contain', background: '#ffffff' })
+    .png()
+    .toBuffer();
 }
