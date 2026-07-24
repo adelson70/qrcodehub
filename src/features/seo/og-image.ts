@@ -1,6 +1,7 @@
 import sharp from 'sharp';
 import { encodeQr } from '@/features/qr/encode/encode';
 import { renderSvg } from '@/features/qr/render/render';
+import { siteHost, siteQrPayload } from '@/features/seo/site';
 
 /**
  * Open Graph card, generated at build time.
@@ -81,7 +82,7 @@ function buildSvg({ title, eyebrow, qrPayload }: OgCardInput): string {
 
   // A real, scannable code rather than a decorative pattern. Someone will point
   // a phone at the preview image, and it should do something.
-  const encoded = encodeQr(qrPayload ?? 'https://qrhub.app', {
+  const encoded = encodeQr(qrPayload ?? siteQrPayload(), {
     errorCorrection: 'M',
   });
   const qr = encoded.ok
@@ -105,7 +106,7 @@ function buildSvg({ title, eyebrow, qrPayload }: OgCardInput): string {
     .join('\n  ')}
 
   <text x="80" y="540" font-family="Inter, system-ui, sans-serif" font-size="28" fill="${MUTED}">Free forever · No signup · Never expires</text>
-  <text x="80" y="580" font-family="Inter, system-ui, sans-serif" font-size="28" font-weight="600" fill="${ACCENT}">qrhub.app</text>
+  <text x="80" y="580" font-family="Inter, system-ui, sans-serif" font-size="28" font-weight="600" fill="${ACCENT}">${escapeXml(siteHost())}</text>
 
   <rect x="820" y="175" width="300" height="300" rx="16" fill="${SURFACE}" stroke="${BORDER}"/>
   <svg x="845" y="200" width="250" height="250" viewBox="${qrViewBox}">${qrInner}</svg>

@@ -27,6 +27,7 @@ const STRINGS = {
     'footer.explanation':
       'Every code is static: the data is encoded directly into the pattern, not stored on a server. There is nothing to expire, nothing to subscribe to, and nothing we could switch off. Generation happens entirely in your browser.',
     'footer.rights': 'Free forever.',
+    'footer.forAi': 'llms.txt',
 
     'home.title': 'QR Code Generator',
     'home.subtitle':
@@ -34,6 +35,8 @@ const STRINGS = {
     'home.allTypes': 'Every kind of QR code',
     'home.allTypesLead':
       'Each type has its own generator with the fields it actually needs.',
+    'home.exploreTools': 'Browse all generators',
+    'home.openScanner': 'QR code scanner',
 
     'value.permanent.title': 'It never expires',
     'value.permanent.body':
@@ -54,6 +57,7 @@ const STRINGS = {
     'page.expires': 'Does this QR code expire?',
     'page.faq': 'Frequently asked questions',
     'page.related': 'Related generators',
+    'page.allGenerators': 'All generators',
     'page.privacyTitle': 'Nothing is uploaded',
     'page.privacyBody':
       'This page does all its work in your browser. Open your developer tools and watch the network tab while you type — you will not see a single request carrying what you entered.',
@@ -87,6 +91,7 @@ const STRINGS = {
     'footer.explanation':
       'Todo código aqui é estático: os dados ficam gravados no próprio desenho, não em um servidor. Não há nada para expirar, nenhuma assinatura para vencer e nada que possamos desligar. A geração acontece inteiramente no seu navegador.',
     'footer.rights': 'Gratuito para sempre.',
+    'footer.forAi': 'llms.txt',
 
     'home.title': 'Gerador de QR Code',
     'home.subtitle':
@@ -94,6 +99,8 @@ const STRINGS = {
     'home.allTypes': 'Todos os tipos de QR Code',
     'home.allTypesLead':
       'Cada tipo tem seu próprio gerador, com os campos que ele realmente precisa.',
+    'home.exploreTools': 'Ver todos os geradores',
+    'home.openScanner': 'Leitor de QR Code',
 
     'value.permanent.title': 'Nunca expira',
     'value.permanent.body':
@@ -114,6 +121,7 @@ const STRINGS = {
     'page.expires': 'Este QR Code expira?',
     'page.faq': 'Perguntas frequentes',
     'page.related': 'Geradores relacionados',
+    'page.allGenerators': 'Todos os geradores',
     'page.privacyTitle': 'Nada é enviado',
     'page.privacyBody':
       'Esta página faz todo o trabalho no seu navegador. Abra as ferramentas de desenvolvedor e observe a aba de rede enquanto digita — você não verá uma única requisição carregando o que você escreveu.',

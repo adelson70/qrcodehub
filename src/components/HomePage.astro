@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/nav/Breadcrumbs.astro';
 import QrStudio from '@/features/qr/studio/QrStudio';
 import { qrTypes } from '@/features/qr/registry';
 import { TYPE_LOCALES, typePath } from '@/features/qr/types/locales';
@@ -42,6 +43,9 @@ const values = [
   { title: t('value.private.title'), body: t('value.private.body') },
   { title: t('value.free.title'), body: t('value.free.body') },
 ];
+
+const toolsPath = locale === 'en' ? '/tools' : '/pt/ferramentas';
+const scannerHref = locale === 'en' ? '/qr-code-scanner' : '/pt/leitor-qr-code';
 ---
 
 <BaseLayout
@@ -60,6 +64,21 @@ const values = [
     <header class="mb-10 max-w-2xl">
       <h1 class="text-display text-balance">{t('home.title')}</h1>
       <p class="mt-4 text-body text-text-secondary text-pretty">{t('home.subtitle')}</p>
+      <p class="mt-4 text-body-sm text-text-secondary">
+        <a
+          href={toolsPath}
+          class="font-medium text-accent underline-offset-2 hover:underline"
+        >
+          {t('home.exploreTools')}
+        </a>
+        {' · '}
+        <a
+          href={scannerHref}
+          class="font-medium text-accent underline-offset-2 hover:underline"
+        >
+          {t('home.openScanner')}
+        </a>
+      </p>
     </header>
 
     <QrStudio client:load />

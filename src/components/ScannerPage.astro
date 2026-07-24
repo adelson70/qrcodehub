@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { TYPE_LOCALES, typePath } from '@/features/qr/types/locales';
 import Scanner from '@/features/scanner/Scanner';
 import {
   SCANNER_CONTENT,
@@ -7,15 +8,19 @@ import {
   scannerPath,
 } from '@/features/scanner/page-content';
 import type { Locale } from '@/i18n/config';
+import { useTranslations } from '@/i18n/ui';
 
 interface Props {
   locale: Locale;
 }
 
 const { locale } = Astro.props;
+const t = useTranslations(locale);
 const content = SCANNER_CONTENT[locale];
 const canonical = scannerPath(locale);
 const pageUrl = new URL(canonical, Astro.site).toString();
+const toolsPath = locale === 'en' ? '/tools' : '/pt/ferramentas';
+const featuredTypeIds = ['url', 'wifi', 'vcard', 'whatsapp'] as const;
 
 const schema = [
   {
@@ -68,6 +73,36 @@ const schema = [
       The decoder itself is still lazy: 250 KB that only loads on first scan.
     */}
     <Scanner locale={locale} client:load />
+
+    <section class="mt-16 max-w-2xl border-t border-border pt-10">
+      <h2 class="text-h3">{t('page.related')}</h2>
+      <ul class="mt-3 flex flex-col gap-2">
+        {
+          featuredTypeIds.map((typeId) => {
+            const meta = TYPE_LOCALES[locale][typeId];
+            if (!meta) return null;
+            return (
+              <li>
+                <a
+                  href={typePath(typeId, locale)}
+                  class="text-body-sm text-accent underline-offset-2 hover:underline"
+                >
+                  {meta.seo.title}
+                </a>
+              </li>
+            );
+          })
+        }
+        <li>
+          <a
+            href={toolsPath}
+            class="text-body-sm font-medium text-accent underline-offset-2 hover:underline"
+          >
+            {t('page.allGenerators')}
+          </a>
+        </li>
+      </ul>
+    </section>
 
     <div class="mt-20 max-w-2xl border-t border-border pt-12">
       <div class="flex flex-col gap-12">

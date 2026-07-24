@@ -1,5 +1,6 @@
 ---
-import { QrCode, Sun } from 'lucide-react';
+import BrandMark from '@/components/brand/BrandMark.astro';
+import { Sun } from 'lucide-react';
 import { qrTypes } from '@/features/qr/registry';
 import { TYPE_LOCALES, typePath } from '@/features/qr/types/locales';
 import { scannerPath } from '@/features/scanner/page-content';
@@ -64,7 +65,7 @@ const navItem =
       href={homePath}
       class="mr-auto inline-flex min-h-11 items-center gap-2 pr-2 text-body-sm font-semibold text-text-primary"
     >
-      <QrCode className="size-5 text-accent" aria-hidden="true" />
+      <BrandMark class="size-5 text-accent" />
       QRHub
     </a>
 

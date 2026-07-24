@@ -10,7 +10,7 @@ export default defineConfig({
   // TODO(qrhub): replace with the real domain before launch. `site` is required
   // for the sitemap and for absolute canonical, hreflang and OG URLs -- all
   // three are wrong without it.
-  site: 'https://qrhub.abjr.dev',
+  site: 'https://qrcodehub.adbjr.dev',
 
   /*
    * English at the root, Portuguese under /pt.

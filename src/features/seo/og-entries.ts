@@ -2,6 +2,7 @@ import { qrTypes } from '@/features/qr/registry';
 import { TYPE_LOCALES, typePath } from '@/features/qr/types/locales';
 import { getPosts, postPath } from '@/features/blog/blog';
 import { LOCALES, type Locale } from '@/i18n/config';
+import { absoluteUrl, siteQrPayload } from '@/features/seo/site';
 
 /**
  * Every Open Graph card the build will emit.
@@ -24,7 +25,6 @@ export interface OgEntry {
   readonly qrPayload: string;
 }
 
-const SITE = 'https://qrhub.app';
 export const DEFAULT_OG_SLUG = 'default';
 
 export async function getOgEntries(): Promise<OgEntry[]> {
@@ -33,7 +33,7 @@ export async function getOgEntries(): Promise<OgEntry[]> {
       slug: DEFAULT_OG_SLUG,
       title: 'QR Code Generator',
       eyebrow: 'QRHub',
-      qrPayload: SITE,
+      qrPayload: siteQrPayload(),
     },
   ];
 
@@ -45,21 +45,21 @@ export async function getOgEntries(): Promise<OgEntry[]> {
       slug: `${prefix}${isPt ? 'ferramentas' : 'tools'}`,
       title: isPt ? 'Todos os geradores de QR Code' : 'All QR Code Generators',
       eyebrow: 'QRHub',
-      qrPayload: `${SITE}${isPt ? '/pt/ferramentas' : '/tools'}`,
+      qrPayload: absoluteUrl(isPt ? '/pt/ferramentas' : '/tools'),
     });
 
     entries.push({
       slug: `${prefix}${isPt ? 'leitor-qr-code' : 'qr-code-scanner'}`,
       title: isPt ? 'Leitor de QR Code' : 'QR Code Scanner',
       eyebrow: 'QRHub',
-      qrPayload: `${SITE}${isPt ? '/pt/leitor-qr-code' : '/qr-code-scanner'}`,
+      qrPayload: absoluteUrl(isPt ? '/pt/leitor-qr-code' : '/qr-code-scanner'),
     });
 
     entries.push({
       slug: `${prefix}blog`,
       title: isPt ? 'Blog do QRHub' : 'QRHub Blog',
       eyebrow: 'QRHub',
-      qrPayload: `${SITE}${isPt ? '/pt/blog' : '/blog'}`,
+      qrPayload: absoluteUrl(isPt ? '/pt/blog' : '/blog'),
     });
 
     for (const type of qrTypes) {
@@ -69,7 +69,7 @@ export async function getOgEntries(): Promise<OgEntry[]> {
         slug: `${prefix}${meta.slug.replace(/^\//, '')}`,
         title: meta.seo.title,
         eyebrow: 'QRHub',
-        qrPayload: `${SITE}${typePath(type.id, locale)}`,
+        qrPayload: absoluteUrl(typePath(type.id, locale)),
       });
     }
 
@@ -78,7 +78,7 @@ export async function getOgEntries(): Promise<OgEntry[]> {
         slug: `${prefix}blog/${post.id}`,
         title: post.data.title,
         eyebrow: isPt ? 'Blog do QRHub' : 'QRHub Blog',
-        qrPayload: `${SITE}${postPath(post.id, locale as Locale)}`,
+        qrPayload: absoluteUrl(postPath(post.id, locale as Locale)),
       });
     }
   }

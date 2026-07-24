@@ -9,6 +9,18 @@ import { LOCALE_TAG, type Locale } from '@/i18n/config';
 import { buildAlternates, localeFromPath } from '@/i18n/utils';
 import { ogImageFor } from '@/features/seo/og-entries';
 
+/** Open Graph locale codes (not the same strings as hreflang). */
+const OG_LOCALE: Record<Locale, string> = {
+  en: 'en_US',
+  'pt-BR': 'pt_BR',
+};
+
+function ogLocaleFromHreflang(hreflang: string): string | undefined {
+  if (hreflang === 'en') return 'en_US';
+  if (hreflang === 'pt-BR') return 'pt_BR';
+  return undefined;
+}
+
 interface Props {
   title: string;
   description: string;
@@ -58,6 +70,11 @@ const canonicalUrl = new URL(canonical ?? Astro.url.pathname, Astro.site);
  */
 const ogImage = new URL(await ogImageFor(canonicalUrl.pathname), Astro.site);
 const alternateLinks = alternates ? buildAlternates(alternates, Astro.site) : [];
+const ogLocale = OG_LOCALE[locale];
+const ogLocaleAlternates = alternateLinks
+  .map((link) => ogLocaleFromHreflang(link.hreflang))
+  .filter((value): value is string => Boolean(value) && value !== ogLocale);
+const ogLocaleAlternateUnique = [...new Set(ogLocaleAlternates)];
 ---
 
 <!doctype html>
@@ -65,7 +82,7 @@ const alternateLinks = alternates ? buildAlternates(alternates, Astro.site) : []
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=3" />
 
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -84,6 +101,12 @@ const alternateLinks = alternates ? buildAlternates(alternates, Astro.site) : []
       ))
     }
 
+    <meta property="og:locale" content={ogLocale} />
+    {
+      ogLocaleAlternateUnique.map((alternate) => (
+        <meta property="og:locale:alternate" content={alternate} />
+      ))
+    }
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -91,6 +114,9 @@ const alternateLinks = alternates ? buildAlternates(alternates, Astro.site) : []
     <meta property="og:image" content={ogImage} />
     <meta property="og:site_name" content="QRHub" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
 
     <!--
       Preload the font so it is requested in parallel with the stylesheet rather

@@ -91,6 +91,13 @@ const toolsPath = locale === 'en' ? '/tools' : '/pt/ferramentas';
 
     <p class="mt-10 border-t border-border pt-6 text-caption text-text-secondary">
       &copy; {year} QRHub. {t('footer.rights')}
+      {' · '}
+      <a
+        href="/llms.txt"
+        class="transition-colors duration-(--duration-fast) hover:text-text-primary"
+      >
+        {t('footer.forAi')}
+      </a>
     </p>
   </div>
 </footer>

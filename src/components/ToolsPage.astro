@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/nav/Breadcrumbs.astro';
 import { qrTypes } from '@/features/qr/registry';
 import { getTypeContent } from '@/features/qr/types/content';
 import { TYPE_LOCALES, typePath } from '@/features/qr/types/locales';
@@ -19,6 +20,7 @@ const t = useTranslations(locale);
 
 const canonical = locale === 'en' ? '/tools' : '/pt/ferramentas';
 const alternates = { en: '/tools', 'pt-BR': '/pt/ferramentas' } as const;
+const homePath = locale === 'en' ? '/' : '/pt';
 
 const schema = [
   {
@@ -46,6 +48,7 @@ const schema = [
   schema={schema}
 >
   <main id="main" class="mx-auto max-w-6xl px-6 py-12 sm:py-16">
+    <Breadcrumbs items={[{ label: 'QRHub', href: homePath }, { label: t('tools.title') }]} />
     <header class="mb-10 max-w-2xl">
       <h1 class="text-h1">{t('tools.title')}</h1>
       <p class="mt-3 text-body text-text-secondary">{t('tools.lead')}</p>
