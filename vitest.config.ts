@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitest/config';
+import { CANONICAL_SITE_ORIGIN } from './src/features/seo/canonical-site.mjs';
 
 /**
  * Vitest owns unit tests only.
@@ -13,7 +14,7 @@ export default defineConfig({
     include: ['src/**/*.test.ts'],
     exclude: ['tests/e2e/**', 'node_modules/**', 'dist/**'],
     env: {
-      SITE: 'https://qrcodehub.adbjr.dev',
+      SITE: CANONICAL_SITE_ORIGIN,
     },
   },
   resolve: {

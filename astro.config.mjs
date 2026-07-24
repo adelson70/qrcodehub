@@ -4,13 +4,12 @@ import { defineConfig, envField } from 'astro/config';
 import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
+import { CANONICAL_SITE_ORIGIN } from './src/features/seo/canonical-site.mjs';
+import { sitemapFilter, sitemapSerialize } from './src/features/seo/sitemap-config.mjs';
 
 // https://astro.build/config
 export default defineConfig({
-  // TODO(qrhub): replace with the real domain before launch. `site` is required
-  // for the sitemap and for absolute canonical, hreflang and OG URLs -- all
-  // three are wrong without it.
-  site: 'https://qrcodehub.adbjr.dev',
+  site: CANONICAL_SITE_ORIGIN,
 
   /*
    * English at the root, Portuguese under /pt.
@@ -77,8 +76,8 @@ export default defineConfig({
         defaultLocale: 'en',
         locales: { en: 'en', pt: 'pt-BR' },
       },
-      filter: (page) =>
-        !page.includes('/scan-test') && !page.includes('/design-tokens'),
+      filter: sitemapFilter,
+      serialize: sitemapSerialize,
     }),
   ],
 

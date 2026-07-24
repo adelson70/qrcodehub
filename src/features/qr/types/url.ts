@@ -15,7 +15,7 @@ export const urlType = defineQrType({
   icon: 'Link',
   schema: urlSchema,
 
-  example: { url: 'https://qrhub.app' },
+  example: { url: 'https://qrcodehub.abjr.dev' },
 
   seo: {
     title: 'URL QR Code Generator',

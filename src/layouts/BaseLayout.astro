@@ -87,7 +87,19 @@ const ogLocaleAlternateUnique = [...new Set(ogLocaleAlternates)];
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
-    {noindex && <meta name="robots" content="noindex, follow" />}
+    {!noindex && (
+      <link
+        rel="sitemap"
+        type="application/xml"
+        title="Sitemap"
+        href={new URL('/sitemap-index.xml', Astro.site)}
+      />
+    )}
+    {noindex ? (
+      <meta name="robots" content="noindex, follow" />
+    ) : (
+      <meta name="robots" content="index, follow, max-image-preview:large" />
+    )}
 
     {/*
       Reciprocal and self-inclusive: every version links to every version,

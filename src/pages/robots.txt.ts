@@ -12,14 +12,12 @@ export const GET: APIRoute = () => {
   const body = `User-agent: *
 Allow: /
 
-# Internal verification pages. Also marked noindex in their own markup --
-# robots.txt only stops crawling, and a page that is merely uncrawled can still
-# be indexed from an external link. The meta tag is what actually keeps them out.
+# Internal verification pages. Also marked noindex in their own markup.
 Disallow: /scan-test
 Disallow: /design-tokens
 
-# Machine-readable site summary for generative search tools.
-# ${origin}/llms.txt
+# Generative search / LLM crawlers (not blocked).
+# Summary: ${origin}/llms.txt
 
 Sitemap: ${origin}/sitemap-index.xml
 `;

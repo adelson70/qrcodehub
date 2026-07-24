@@ -5,7 +5,9 @@
  * Tests and asset-generation scripts fall back to the constant so URLs stay
  * consistent when Astro is not in the loop.
  */
-export const CANONICAL_SITE_ORIGIN = 'https://qrcodehub.adbjr.dev';
+import { CANONICAL_SITE_ORIGIN } from './canonical-site.mjs';
+
+export { CANONICAL_SITE_ORIGIN };
 
 export function siteOrigin(): string {
   const fromEnv =

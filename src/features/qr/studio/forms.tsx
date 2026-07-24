@@ -317,7 +317,7 @@ function UrlForm({ values, setField, errors }: FormProps) {
         name="url"
         value={str(values, 'url')}
         onChange={(event) => setField('url', event.target.value)}
-        placeholder="qrhub.app"
+        placeholder="qrcodehub.abjr.dev"
         autoComplete="off"
         spellCheck={false}
       />
