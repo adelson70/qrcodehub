@@ -93,6 +93,34 @@ por escaneamento — que os logs do seu servidor aproximam de qualquer jeito.
 É exatamente o que um código dinâmico faz, com a diferença de que o
 redirecionamento é seu em vez de alugado.
 
+## Analytics de scan: o que o dinâmico dá e como aproximar no estático
+
+O segundo motivo honesto para pagar QR dinâmico é **relatório por escaneamento**:
+aberturas únicas, horário, tipo de aparelho, às vezes geolocalização por IP.
+
+Os dados são reais e úteis em campanha com duas entradas ou para provar alcance
+de patrocínio. Também são:
+
+- Presos ao painel do fornecedor, não ao seu CRM
+- Perdidos no dia em que você cancela
+- Inexistentes para Wi-Fi, vCard e outros payloads offline
+
+**Alternativas estáticas que cobrem a maioria dos restaurantes e varejos:**
+
+| Necessidade | Abordagem estática |
+|---|---|
+| "Quantos abriram o cardápio?" | Logs do servidor em `/cardapio` — conte hits, ignore bots grosso modo |
+| "Qual panfleto funcionou?" | Caminhos curtos diferentes: `/cardapio-a` e `/cardapio-b`, cada um com seu QR impresso |
+| "Veio do pôster norte?" | Codifique só aquele caminho no pôster norte |
+
+Você abre mão de gráficos automáticos de dispositivo, mas mantém códigos que
+funcionam em três anos. Em cardápio e embalagem, longevidade costuma valer mais
+que relatório semanal.
+
+Se analytics de fornecedor for obrigatório, trate o dinâmico como **linha de
+assinatura** com a mesma seriedade do aluguel — porque código impresso não dá
+para "despublicar". Mais modos de falha em [QR Code expira?](/pt/blog/qr-code-expira).
+
 ## Como saber qual é o seu
 
 Escaneie o próprio código e leia o destino antes de abrir. Se aparecer um domínio

@@ -41,6 +41,23 @@ Use uma página web normal. Se você não tem site, uma página única listando 
 e preços em HTML simples ganha de um PDF lindamente diagramado, sempre. O cliente
 está segurando um celular com uma mão só, numa mesa mal iluminada.
 
+### Por que PDF quebra no iPhone em especial
+
+O Safari no iOS não trata link de PDF como página web. Resultados comuns:
+
+- O arquivo abre no Quick Look com letra minúscula e sem layout responsivo
+- O iOS oferece download em vez de exibir, e o cliente fica no app Arquivos
+- Voltar deixa aba em branco em vez do seu site
+
+No Android o comportamento varia por navegador — pior para treinar equipe: "no meu
+celular funciona" não é estratégia de cardápio. Hospede HTML em `/cardapio`; deixe
+PDF só para cozinha ou gráfica.
+
+Se já imprimiu código apontando para URL `.pdf`, nem sempre precisa de adesivo
+novo — mude o que o servidor entrega naquele caminho ou redirecione `/cardapio`
+para página mobile. Só regenere o QR se a URL codificada no padrão tiver que mudar.
+Veja [estático vs dinâmico](/pt/blog/qr-code-estatico-vs-dinamico).
+
 ## Dois códigos, não um
 
 Dê ao Wi-Fi um código próprio, ao lado do código do cardápio.

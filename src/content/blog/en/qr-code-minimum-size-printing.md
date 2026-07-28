@@ -106,6 +106,7 @@ If all three read it in poor light, the size is right. If any hesitate, go large
 or encode less. There is more on the other failure modes in
 [Why is my QR code not scanning?](/blog/why-qr-code-not-scanning).
 
-[Download as SVG](/) when the destination is print. It is resolution-independent,
-so it stays exact at any size — where a scaled-up PNG blurs the module edges and
-costs you contrast you cannot afford.
+For file format and colour on press, see
+[SVG vs PNG for print](/blog/qr-code-svg-vs-png-for-print) and
+[colors and contrast](/blog/qr-code-colors-contrast-for-print).
+[Download as SVG](/) when the destination is print.

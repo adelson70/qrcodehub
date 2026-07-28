@@ -100,6 +100,24 @@ realmente oculta faz o celular nunca encontrá-la.
 
 Só marque se a sua rede for de fato oculta.
 
+## Rede de visitantes: mesmas regras, política de senha diferente
+
+Muitos cafés imprimem código para `WiFi_Visitante` enquanto a equipe fica na rede
+principal. O formato QR não muda — só guarda SSID, segurança e senha digitados. O
+que muda é **operação**:
+
+- Senha de visitante rotaciona todo mês? É preciso reimprimir ou trocar o adesivo;
+  estático não "atualiza" sem gerar padrão novo.
+- Portal cativo ou aceite de termos? O QR Wi-Fi sozinho não completa isso; o cliente
+  entra no rádio mas ainda precisa do navegador. Avise embaixo: "Abra o navegador
+  depois de conectar."
+- `_5G` no nome: codifique o SSID exato que o celular deve usar, como na seção 3.
+
+Para VLAN de visitante, trate o adesivo como senha escrita: visível só no salão, não
+na vitrine. Combine com
+[cardápio + Wi-Fi](/pt/blog/qr-code-cardapio-restaurante) quando os dois códigos
+estão no mesmo display.
+
 ## Diagnosticando em trinta segundos
 
 Escaneie o código com um leitor de QR comum que mostre o texto cru em vez de agir

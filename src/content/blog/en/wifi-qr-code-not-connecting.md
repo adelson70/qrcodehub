@@ -102,6 +102,25 @@ genuinely hidden one means the phone never finds it.
 
 Only tick it if your network really is hidden.
 
+## Guest networks: same QR rules, different password policy
+
+Many cafés print a code for `Guest_WiFi` while staff stays on the main SSID. The
+QR format does not care — it only stores the SSID, security type and password you
+type. What changes is **operational**:
+
+- Rotate the guest password monthly? You must reprint or laminate a new sticker;
+  a static code cannot be "updated" without generating a new pattern.
+- Captive portal or terms-and-conditions click-through? A bare WiFi QR cannot
+  complete that flow; guests join the radio network but still need a browser step.
+  Put a short note under the code: "Open browser after connecting."
+- Band steering (`_5G` suffix): encode the exact SSID the phone should join, as
+  in section 3 above.
+
+For a dedicated guest VLAN, treat the printed code like a written password: visible
+only inside the dining room, not in the front window. Pair with
+[restaurant WiFi + menu setup](/blog/qr-codes-restaurant-menus) when both codes
+sit on the same tent card.
+
 ## Diagnosing it in thirty seconds
 
 Scan the code with a plain QR reader that shows raw text rather than acting on it

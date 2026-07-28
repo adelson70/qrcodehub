@@ -91,6 +91,33 @@ is per-scan analytics, which your server logs can approximate anyway.
 This is what a dynamic code does — except you own the redirect instead of renting
 it.
 
+## Scan analytics: what dynamic gives you, and what you can approximate
+
+The second honest reason to buy dynamic QR is **per-scan reporting**: unique
+opens, time of day, device type, sometimes geolocation inferred from IP.
+
+That data is real and useful for campaign posters with two entrances, or for
+proving sponsorship reach. It is also:
+
+- Tied to the vendor's dashboard, not your CRM
+- Lost the day you cancel
+- Absent for WiFi, vCard and other offline payloads anyway
+
+**Static alternatives that cover most restaurants and retailers:**
+
+| Need | Static approach |
+|---|---|
+| "How many people opened the menu?" | Server logs on `/menu` — count hits, ignore bots roughly |
+| "Which flyer worked?" | Different short paths: `/menu-a` and `/menu-b`, each with its own printed code |
+| "Did they come from the north poster?" | Encode that path only on the north poster |
+
+You give up automatic device graphs, but you keep codes that still work in three
+years. For packaging and menus, longevity usually beats weekly charts.
+
+If you truly need vendor analytics, treat dynamic as a **subscription line item**
+with the same seriousness as the lease — because printed codes cannot be
+un-deployed. More failure modes in [Do QR codes expire?](/blog/do-qr-codes-expire).
+
 ## How to check what you have
 
 Scan your own code and read the destination before opening it. If it shows a

@@ -38,7 +38,8 @@ mal. O decodificador precisa separar módulos escuros dos claros antes de fazer
 qualquer outra coisa.
 
 **Solução:** mantenha contraste forte — escuro sobre claro. Teste com luz ruim,
-não só no monitor.
+não só no monitor. CMYK e cor de marca têm checklist próprio em
+[cores e contraste na impressão](/pt/blog/qr-code-cores-contraste-impressao).
 
 ## 4. Está invertido
 

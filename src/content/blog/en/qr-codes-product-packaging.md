@@ -103,7 +103,9 @@ stop being distinguishable.
   that film behave together.
 
 If the press proof scans on three phones, you are done. If it does not, the cause
-is almost always size, contrast or a cropped quiet zone.
+is almost always size, contrast or a cropped quiet zone — see
+[colors and contrast for print](/blog/qr-code-colors-contrast-for-print) and
+[SVG vs PNG handoff](/blog/qr-code-svg-vs-png-for-print).
 
 ## Sizes: use 0.5 mm per module
 

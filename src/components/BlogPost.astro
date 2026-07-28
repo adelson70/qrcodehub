@@ -36,6 +36,20 @@ const schema = [
     author: { '@type': 'Organization', name: 'QRHub' },
     publisher: { '@type': 'Organization', name: 'QRHub' },
   },
+  ...(post.data.faq && post.data.faq.length > 0
+    ? [
+        {
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          inLanguage: locale,
+          mainEntity: post.data.faq.map((entry) => ({
+            '@type': 'Question',
+            name: entry.question,
+            acceptedAnswer: { '@type': 'Answer', text: entry.answer },
+          })),
+        },
+      ]
+    : []),
 ];
 
 const dateFormatter = new Intl.DateTimeFormat(isPt ? 'pt-BR' : 'en-GB', {

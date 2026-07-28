@@ -101,7 +101,9 @@ e escuro deixam de se distinguir.
   anilox e aquele filme se comportam juntos.
 
 Se a prova de máquina lê em três celulares, acabou. Se não lê, a causa quase
-sempre é tamanho, contraste ou zona de silêncio cortada.
+sempre é tamanho, contraste ou zona de silêncio cortada — veja
+[cores e contraste](/pt/blog/qr-code-cores-contraste-impressao) e
+[SVG ou PNG](/pt/blog/qr-code-svg-ou-png-impressao).
 
 ## Tamanho: 0,5 mm por módulo
 

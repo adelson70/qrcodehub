@@ -111,6 +111,7 @@ Se os três lerem com luz ruim, o tamanho está certo. Se algum hesitar, aumente
 codifique menos. Tem mais sobre os outros modos de falha em
 [Por que meu QR Code não lê?](/pt/blog/qr-code-nao-le).
 
-[Baixe em SVG](/pt) quando o destino for impressão. Ele é independente de
-resolução e continua exato em qualquer tamanho — enquanto um PNG ampliado borra as
-bordas dos módulos e custa um contraste que você não pode perder.
+Para formato e cor na gráfica, veja
+[SVG ou PNG na impressão](/pt/blog/qr-code-svg-ou-png-impressao) e
+[cores e contraste](/pt/blog/qr-code-cores-contraste-impressao).
+[Baixe em SVG](/pt) quando o destino for impressão.

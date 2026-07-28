@@ -42,6 +42,24 @@ Use a normal web page. If you have no site, a single page listing dishes and
 prices in plain HTML beats a beautifully designed PDF, every time. The customer
 is holding a phone in one hand at a dim table.
 
+### Why PDF menus break on iPhones in particular
+
+Safari on iOS does not treat a PDF link like a normal web page. Common outcomes:
+
+- The file opens in Quick Look with tiny type and no responsive layout
+- iOS offers to download instead of display, leaving the guest staring at Files
+- Back-navigation drops them on a blank tab instead of your site
+
+Android behaviour varies by browser, which is worse for staff training: "it works
+on my phone" is not a menu strategy. Host HTML at `/menu`, keep PDFs for kitchen
+or printer workflows only.
+
+If you already printed a code that points at a `.pdf` URL, you do not need new
+stickers — change what that URL serves on your server, or redirect `/menu` to a
+mobile page and update the static code only if the encoded URL itself must change.
+See [Static vs dynamic QR codes](/blog/static-vs-dynamic-qr-codes) for editing
+destinations without renting a redirect service.
+
 ## Two codes, not one
 
 Give the WiFi its own code next to the menu code.

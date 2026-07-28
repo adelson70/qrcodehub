@@ -38,7 +38,8 @@ badly. The decoder has to separate dark modules from light ones before it can do
 anything else.
 
 **Fix:** keep a strong contrast ratio — dark on light. Test in poor lighting, not
-just on your monitor.
+just on your monitor. CMYK and brand colours need their own checklist — see
+[QR code colors and contrast for print](/blog/qr-code-colors-contrast-for-print).
 
 ## 4. It is inverted
 

@@ -35,6 +35,15 @@ const postSchema = z.object({
   /** Pillar posts receive links from every post in their cluster. */
   pillar: z.boolean().default(false),
   draft: z.boolean().default(false),
+  /** Optional FAQ for FAQPage JSON-LD in BlogPost. */
+  faq: z
+    .array(
+      z.object({
+        question: z.string(),
+        answer: z.string(),
+      }),
+    )
+    .optional(),
 });
 
 const blogEn = defineCollection({
